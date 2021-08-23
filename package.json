@@ -1,0 +1,28 @@
+{
+  "name": "openmusic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "hapi": "^18.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.1",
+    "joi": "^17.4.2",
+    "nanoid": "^3.1.25",
+    "node-pg-migrate": "^5.10.0",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./src/server.js",
+    "lint": "eslint ./src",
+    "migrate": "node-pg-migrate"
+  },
+  "author": "",
+  "license": "ISC"
+}

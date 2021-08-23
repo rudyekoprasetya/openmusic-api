@@ -7,6 +7,7 @@
     "hapi": "^18.1.0"
   },
   "devDependencies": {
+    "@hapi/hapi": "^20.1.5",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",

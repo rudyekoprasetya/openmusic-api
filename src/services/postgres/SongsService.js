@@ -2,6 +2,8 @@ const { nanoid } = require('nanoid');
 const {Pool} = require('pg');
 //import mapping db
 const {mapDBToModel} = require('../../utils')
+//import error
+const NotFoundError = require('../../exceptions/NotFoundError');
 
 class SongsService {
     constructor() {

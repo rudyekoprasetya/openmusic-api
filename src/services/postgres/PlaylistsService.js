@@ -121,6 +121,7 @@ class PlaylistsService {
             throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
         }
     }
+    
 }
 
 module.exports = PlaylistsService;

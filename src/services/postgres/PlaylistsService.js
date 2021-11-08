@@ -28,7 +28,7 @@ class PlaylistsService {
     //get playlist
     async getPlaylist(owner) {
         const query = {
-            TEXT: `SELECT a.id, a.name, b.username FROM playlist a JOIN users b ON a.owner=b.id WHERE a.owner=$1 OR b.id=$1`,
+            text: `SELECT a.id, a.name, b.username FROM playlists a JOIN users b ON a.owner=b.id WHERE a.owner=$1 OR b.id=$1`,
             values: [owner],
         };
 
@@ -38,7 +38,7 @@ class PlaylistsService {
             throw new NotFoundError('Playlist tidak ditemukan');
         }
 
-        return result.rows[0];
+        return result.rows;
     }
 
     //del playlist

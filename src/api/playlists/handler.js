@@ -1,10 +1,10 @@
 const ClientError = require("../../exceptions/ClientError");
 
 class PlaylistHandler {
-    constructor(service, validator, validatorSong) {
+    constructor(service, validator, playlistsongvalidator) {
         this._service=service;
         this._validator=validator;
-        this._validatorSong=validatorSong;
+        this._playlistsongvalidator=playlistsongvalidator;
 
         this.postPlaylistHandler=this.postPlaylistHandler.bind(this);
         this.getPlaylistHandler=this.getPlaylistHandler.bind(this);
@@ -19,7 +19,7 @@ class PlaylistHandler {
             this._validator.validatePlaylistPayload(req.payload);
             const { name } = req.payload;
             const { id: credentialId } = req.auth.credentials;
-            const playlistId = await this._service.addPlaylist({ name, owner: credentialId,});
+            const playlistId = await this._service.addPlaylist( name, credentialId);
 
             const res = h.response({
                 status: 'success',
@@ -51,12 +51,18 @@ class PlaylistHandler {
     async getPlaylistHandler(req, h) {
         try {
           const { id: credentialId } = req.auth.credentials;
-          const playlist = await this._service.getPlaylist(credentialId);
+          const data = await this._service.getPlaylist(credentialId);
     
           return {
             status: 'success',
             data: {
-              playlist,
+              // playlist,
+              playlists:data.map((n)=>({
+                id:n.id,
+                name:n.name,
+                username:n.username
+              }))
+
             },
           };
         } catch (error) {
@@ -112,7 +118,7 @@ class PlaylistHandler {
 
     async postSongPlaylistHandler(req, h) {
         try {
-            this._validatorSong.validatePlaylistSongPayload(req.payload);
+            this._validator.validatePlaylistSongPayload(req.payload);
             const { songId } = req.payload;
             const { playlistId } = req.params;
             const { id:credentialId } = req.auth.credentials;
@@ -150,12 +156,17 @@ class PlaylistHandler {
             const { playlistId } = req.params;
       
             // await this._playlistService.verifyPlaylistAccess(playlistId, userId);
-            const songs = await this._service.getSongInPlaylist(playlistId);
+            const data = await this._service.getSongInPlaylist(playlistId);
       
             return {
               status: 'success',
               data: {
-                songs,
+                // songs,
+                songs:data.map((n)=>({
+                  id:n.id,
+                  title:n.title,
+                  performer:n.performer
+                }))
               },
             };
         } catch (error) {
@@ -178,7 +189,7 @@ class PlaylistHandler {
 
     async deleteSongPlaylistByIdHandler(req, h) {
         try {
-            this._validatorSong.validatePlaylistSongPayload(req.payload);
+            this._validator.validatePlaylistSongPayload(req.payload);
             const { songId } = req.payload;
             const { id:credentialId } = req.auth.credentials;
             const { playlistId } = req.params;

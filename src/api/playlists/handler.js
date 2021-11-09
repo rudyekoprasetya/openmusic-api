@@ -125,7 +125,7 @@ class PlaylistHandler {
       
             // await this._playlistService.verifyPlaylistAccess(playlistId, userId);
             // await this._songService.verifySongService(songId);
-            await this._service.addSongToPlaylist({ playlistId, songId });
+            await this._service.addSongToPlaylist(playlistId,songId);
       
             const res = h.response({
               status: 'success',

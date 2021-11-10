@@ -56,7 +56,7 @@ class PlaylistsService {
     }
 
     //post song to playlist
-    async addSongToPlaylist(playlistId,songId) {
+    async addSongToPlaylist({playlistId,songId}) {
         const id = nanoid(16);
 
         const query = {

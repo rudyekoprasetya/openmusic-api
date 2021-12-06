@@ -1,15 +1,23 @@
-const mapDBToModel = ({ inserted_at, updated_at, ...args }) => ({
-  ...args,
-  insertedAt: inserted_at,
-  updatedAt: updated_at,
-});
+//untuk mapping data
 
-const mapDBToPlaylists = ({
-  id,
-  name,
-  username,
+const mapDBToModel = ({
+    id,
+    title,
+    year,
+    performer,
+    genre,
+    duration,
+    inserted_at,
+    updated_at
 }) => ({
-  id, name, username,
+    id,
+    title,
+    year,
+    performer,
+    genre,
+    duration,
+    insertedAt: inserted_at,
+    updatedAt: updated_at
 });
 
-module.exports = { mapDBToModel, mapDBToPlaylists };
+module.exports={mapDBToModel};

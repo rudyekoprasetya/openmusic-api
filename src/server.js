@@ -5,9 +5,7 @@ const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 
 const songs = require('./api/songs');
-//database
 const SongsService = require('./services/postgres/SongsService');
-//import validator Joi
 const SongsValidator = require('./validator/songs');
 
 //users
@@ -25,7 +23,16 @@ const AuthenticationsValidator = require('./validator/authentications');
 const playlists = require('./api/playlists');
 const PlaylistsService = require('./services/postgres/PlaylistsService');
 const PlaylistValidator = require('./validator/playlists')
-const PlaylistSongValidator =  require('./validator/playlistsongs')
+
+// playlistsongs
+const playlistsongs = require('./api/playlistsongs');
+const PlaylistSongsService = require('./services/postgres/PlaylistSongsService');
+const PlaylistSongsValidator = require('./validator/playlistsongs');
+
+// collaborations
+const collaborations = require('./api/collaborations');
+const CollaborationsService = require('./services/postgres/CollaborationsService');
+const CollaborationsValidator = require('./validator/collaborations');
 
 const init = async() =>{
 	const songService = new SongsService();
@@ -34,6 +41,8 @@ const init = async() =>{
 	//instance auth
 	const authenticationsService = new AuthenticationsService();
 	const playlistService = new PlaylistsService();
+	const playlistsongsService = new PlaylistSongsService();
+	const collaborationsService = new CollaborationsService();
 
 	const server = Hapi.server({
 		port:  process.env.PORT,
@@ -98,7 +107,23 @@ const init = async() =>{
 			options: {
 			  service: playlistService,
 			  validator: PlaylistValidator,
-			  playlistsongvalidator: PlaylistSongValidator,
+			  playlistvalidator: PlaylistValidator,
+			},
+		},
+		{
+		plugin: playlistsongs,
+		options: {
+			service: playlistsongsService,
+			servicePlaylist: playlistService,
+			validator: PlaylistSongsValidator,
+			},
+		},
+		{
+			plugin: collaborations,
+			options: {
+			  collaborationsService,
+			  playlistService,
+			  validator: CollaborationsValidator,
 			},
 		},
 	]);

@@ -5,8 +5,9 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 const AuthorizationError = require('../../exceptions/AuthorizationError')
 
 class PlaylistsService {
-    constructor() {
+    constructor(collaborationService) {
         this._pool = new Pool();
+        this._collaborationService = collaborationService;
     }
 
     //post playlist
@@ -54,7 +55,7 @@ class PlaylistsService {
         if (!result.rows.length) {
             throw new InvariantError('Playlist gagal dihapus');
         }
-    }
+    } 
 
     //verifikasi Playlist owner
     async verifyPlaylistOwner(playlistId, owner) {

@@ -48,17 +48,17 @@ class PlaylistHandler {
     async getPlaylistHandler(req, h) {
         try {
           const { id: credentialId } = req.auth.credentials;
-          const playlists = await this._service.getPlaylist(credentialId);
+          const data = await this._service.getPlaylist(credentialId);
     
           return {
             status: 'success',
             data: {
-              playlists,
-              // playlists:data.map((n)=>({
-              //   id:n.id,
-              //   name:n.name,
-              //   username:n.username
-              // }))
+              // playlists,
+              playlists:data.map((n)=>({
+                id:n.id,
+                name:n.name,
+                username:n.username
+              }))
 
             },
           };

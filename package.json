@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@hapi/jwt": "^2.1.0",
+    "amqplib": "^0.8.0",
     "bcrypt": "^5.0.1",
     "hapi": "^18.1.0"
   },

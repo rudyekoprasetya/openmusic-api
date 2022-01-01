@@ -1,57 +1,54 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class ExportsHandler {
-    constructor(service, playlistService, validator) {
+    constructor(service, playlistsService, validator) {
       this._service = service;
       this._validator = validator;
-      this._playlistService = playlistService;
+      this._playlistsService = playlistsService;
 
-      this.postExportPlaylistHandler = this.postExportPlaylistHandler.bind(this);
+      this.postExportSongsHandler = this.postExportSongsHandler.bind(this);
     }
 
-    async postExportPlaylistHandler(request, h) {
+    async postExportSongsHandler(request, h) {
         try {
-            this._validator.validateExportNotesPayload(request.payload);
-
-            const { playlistId } = request.params;
-            const { id: userId } = request.auth.credentials;
-            await this._playlistService.verifyPlaylistAccess(playlistId, userId);
-           
-            const message = {
-                // userId: request.auth.credentials.id,
-                playlistId,
-                targetEmail: request.payload.targetEmail,
-            };
-
-            await this._service.sendMessage('export:playlists', JSON.stringify(message));
-
-            //response
+          this._validator.validateExportSongsPayload(request.payload);
+          const { playlistId } = request.params;
+          const { id: userId } = request.auth.credentials;
+          await this._playlistsService.verifyPlaylistAccess(playlistId, userId);
+    
+          const message = {
+            playlistId,
+            targetEmail: request.payload.targetEmail,
+          };
+    
+          await this._service.sendMessage('export:songs', JSON.stringify(message));
+    
+          const response = h.response({
+            status: 'success',
+            message: 'Permintaan Anda dalam antrean',
+          });
+          response.code(201);
+          return response;
+        } catch (error) {
+          if (error instanceof ClientError) {
             const response = h.response({
-                status: 'success',
-                message: 'Permintaan Anda sedang kami proses',
+              status: 'fail',
+              message: error.message,
             });
-            response.code(201);
+            response.code(error.statusCode);
             return response;
-        } catch(error) {
-            if (error instanceof ClientError) {
-                const response = h.response({
-                    status: 'fail',
-                    message: error.message,
-                });
-                response.code(error.statusCode);
-                return response;
-            }
-            // Server ERROR!
-            const response = h.response({
-                status: 'error',
-                message: 'Maaf, terjadi kegagalan pada server kami.',
-            });
-
-            response.code(500);
-            console.error(error);
-            return response;
+          }
+    
+          // Server ERROR!
+          const response = h.response({
+            status: 'error',
+            message: 'Maaf, terjadi kegagalan pada server kami.',
+          });
+          response.code(500);
+          console.error(error);
+          return response;
         }
-    }
+      }
   }
 
   module.exports = ExportsHandler;
